@@ -15,7 +15,23 @@ const quoteSchema = new mongoose.Schema({
     arc: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Arc',
-    }
+    },
+    themes: {
+        type: [String],
+        default: [],
+    },
+    upvotes: {
+        type: Number,
+        default: 0,
+    },
+    downvotes: {
+        type: Number,
+        default: 0,
+    },
+    source: {
+        type: String,
+        trim: true,
+    },
 },
 {
     timestamps: true,
