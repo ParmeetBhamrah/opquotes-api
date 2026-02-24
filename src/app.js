@@ -2,10 +2,12 @@ const express = require('express');
 const app = express()
 const errorHandler = require('./middleware/errorHandler');
 const characterRoutes = require('./routes/characterRoutes');
+const arcRoutes = require('./routes/arcRoutes');
 
 app.use(express.json()); // inbuilt middleware for PUT/POST
 
 app.use('/api/characters', characterRoutes);
+app.use('/api/arcs', arcRoutes);
 
 app.get('/', (req, res) => {
     res.status(200).json({
