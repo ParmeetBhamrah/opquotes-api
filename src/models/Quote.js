@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Character = require('./character');
 
 const quoteSchema = new mongoose.Schema({
     text: {
