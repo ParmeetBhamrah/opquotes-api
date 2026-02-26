@@ -45,7 +45,7 @@ const getAllQuotes = async (req, res, next) => {
 };
 
 // GET /api/quotes/:id
-const getQuotesById = async (req, res, next) => {
+const getQuoteById = async (req, res, next) => {
     try {
         const quote = await Quote.findById(req.params.id)
             .populate('character', 'name crew')
@@ -120,7 +120,7 @@ const deleteQuote = async (req, res, next) => {
 
 module.exports = {
     getAllQuotes,
-    getQuotesById,
+    getQuoteById,
     createQuote,
     updateQuote,
     deleteQuote,
