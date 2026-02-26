@@ -9,7 +9,7 @@ app.use(express.json()); // inbuilt middleware for PUT/POST
 
 app.use('/api/characters', characterRoutes);
 app.use('/api/arcs', arcRoutes);
-app.use('/api/quotes', arcRoutes);
+app.use('/api/quotes', quoteRoutes);
 
 app.get('/', (req, res) => {
     res.status(200).json({

@@ -19,7 +19,7 @@ const getCharacterById = async (req, res, next) => {
     try {
         const character = await Character.findById(req.params.id);
         if (!character) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: 'Character not found'
             });
@@ -58,7 +58,7 @@ const updateCharacter = async (req, res, next) => {
             }
         )
         if (!character) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: 'Character not found',
             });
@@ -77,7 +77,7 @@ const deleteCharacter = async (req, res, next) => {
     try {
         const character = await Character.findByIdAndDelete(req.params.id);
         if (!character) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: 'Character not found',
             })

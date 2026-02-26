@@ -1,4 +1,3 @@
-const { ModifiedPathsSnapshot } = require('mongoose');
 const Quote = require('../models/quote');
 
 // GET /api/quotes
@@ -8,7 +7,7 @@ const getAllQuotes = async (req, res, next) => {
         const filter = {};
         if (req.query.character) filter.character = req.query.character;
         if (req.query.arc) filter.arc = req.query.arc;
-        if (req.query.themes) filter.theme = {$in: [req.query.themes]};
+        if (req.query.themes) filter.themes = {$in: [req.query.themes]};
         if (req.query.search) filter.text = {$regex: req.query.search, $options: 'i'} // $options: 'i' -> to do case-insensitive search
         
         // pagination
@@ -39,7 +38,7 @@ const getAllQuotes = async (req, res, next) => {
             count: quotes.length,
             data: quotes,
         });
-    } catch {
+    } catch (error) {
         next(error);
     }
 };
@@ -50,8 +49,8 @@ const getQuoteById = async (req, res, next) => {
         const quote = await Quote.findById(req.params.id)
             .populate('character', 'name crew')
             .populate('arc', 'name saga');
-        if (!quotes) {
-            res.status(404).json({
+        if (!quote) {
+            return res.status(404).json({
                 success: false,
                 message: 'Quote not found',
             });
@@ -66,7 +65,7 @@ const getQuoteById = async (req, res, next) => {
 };
 
 // POST /api/quotes
-const createQuote = async (req, req, next) => {
+const createQuote = async (req, res, next) => {
     try {
         const quote = await Quote.create(req.body);
         res.status(200).json({
@@ -85,7 +84,7 @@ const updateQuote = async (req, res, next) => {
             .populate('character', 'name crew')
             .populate('arc', 'name saga');
         if (!quote) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: 'Quote not found',
             });
@@ -104,7 +103,7 @@ const deleteQuote = async (req, res, next) => {
     try {
         const quote = await Quote.findByIdAndDelete(req.params.id);
         if (!quote) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: 'Quote not found',
             });

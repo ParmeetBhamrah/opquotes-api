@@ -6,6 +6,7 @@ const getAllArcs = async (req, res, next) => {
         const arcs = await Arc.find().sort({order: 1});
         res.status(200).json({
             success: true,
+            count: arcs.length,
             data: arcs,
         });
     } catch (error) {
@@ -19,7 +20,7 @@ const getArcById = async (req, res, next) => {
     try {
         const arc = await Arc.findById(req.params.id);
         if (!arc) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: 'Arc not found'
             });
@@ -38,7 +39,7 @@ const createArc = async (req, res, next) => {
     try {
         const arc = await Arc.create(req.body);
         res.status(201).json({
-            success: false,
+            success: true,
             data: arc
         });
     } catch (error) {
@@ -51,7 +52,7 @@ const updateArc = async (req, res, next) => {
     try {
         const arc = await Arc.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true});
         if (!arc) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: 'Arc not found',
             });
@@ -70,7 +71,7 @@ const deleteArc = async (req, res, next) => {
     try {
         const arc = await Arc.findByIdAndDelete(req.params.id);
         if (!arc) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: 'Arc not found',
             });
