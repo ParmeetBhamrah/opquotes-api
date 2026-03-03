@@ -117,10 +117,125 @@ const deleteQuote = async (req, res, next) => {
     }
 };
 
+// GET /api/quotes/random
+const getRandomQuote = async (req, res, next) => {
+    try {
+        const result = await Quote.aggregate([{$sample: {size : 1}}]);
+
+        if (!result.length) {
+            return res.status(404).json({
+                success: false,
+                message: 'No quotes found',
+            });
+        }
+        const quote = await Quote.populate(result[0], [
+            {path: 'character', select: 'name crew'},
+            {path: 'arc', select: 'name saga'},
+        ]);
+        res.status(200).json({
+            success: true,
+            data: quote,
+        });
+    } catch (error) {
+        nextt(error);
+    }
+};
+
+
+// GET /api/quotes/today
+const getQuoteOfTheDay = async (req, res, next) => {
+    try {
+        const total = await Quote.countDocuments();
+        if (!total) {
+            res.status(404).json({
+                success: false,
+                message: 'No quotes found',
+            });
+        }
+
+        const now = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        const dayOfYear = Math.floor(now - start / (1000 * 60 * 60 * 24));
+        const index = dayOfYear % total;
+
+        const quote = await Quote.findOne()
+            .skip(index)
+            .populate('character', 'name crew')
+            .populate('arc', 'name saga')
+        
+            res.status(200).json({
+                success: true,
+                data: quote,
+            });
+    } catch (error) {
+        next(error)
+    }
+};
+
+// POST /api/quotes/:id/upvote
+const upvoteQuote = async (req, res, next) => {
+    try {
+        const quote = await Quote.findByIdAndUpdate(
+            req.params.id,
+            {$inc: {upvotes: 1}},
+            {
+                new: true,
+                runValidators: true,
+            }
+        )
+        .populate('character', 'name crew')
+        .populate('arc', 'name saga');
+        if (!quote) {
+                return res.status(404).json({
+                success: false,
+                message: 'Quote not found',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: quote,
+        })
+    } catch (error) {
+        next(error);
+    }
+};
+
+// POST /api/quotes/:id/downvote
+const downvoteQuote = async (req, res, next) => {
+    try {
+        const quote = await Quote.findByIdAndUpdate(
+            req.params.id,
+            {$inc: {downvotes: 1}},
+            {
+                new: true,
+                runValidators: true,
+            }
+        )
+        .populate('character', 'name crew')
+        .populate('arc', 'name saga');
+        if (!quote) {
+                return res.status(404).json({
+                success: false,
+                message: 'Quote not found',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            data: quote,
+        })
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getAllQuotes,
     getQuoteById,
     createQuote,
     updateQuote,
     deleteQuote,
+    getRandomQuote,
+    getQuoteOfTheDay,
+    upvoteQuote,
+    downvoteQuote
 };
