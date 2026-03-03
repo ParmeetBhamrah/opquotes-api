@@ -1,3 +1,4 @@
+const protect = require('../middleware/auth');
 const express = require('express');
 const router = express.Router(); // creates a mini express app
 const {
@@ -10,11 +11,11 @@ const {
 
 router.route('/')
     .get(getAllCharacters)
-    .post(createCharacter);
+    .post(protect, createCharacter);
 
 router.route('/:id')
     .get(getCharacterById)
-    .put(updateCharacter)
-    .delete(deleteCharacter);
+    .put(protect, updateCharacter)
+    .delete(protect, deleteCharacter);
 
 module.exports = router;

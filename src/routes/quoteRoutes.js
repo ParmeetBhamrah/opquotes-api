@@ -1,3 +1,4 @@
+const protect = require('../middleware/auth');
 const express = require('express');
 const router = express.Router();
 const {
@@ -12,13 +13,13 @@ const {
     downvoteQuote
 } = require('../controllers/quoteController');
 
-router.route('/').get(getAllQuotes).post(createQuote);
+router.route('/').get(getAllQuotes).post(protect, createQuote);
 router.get('/today', getQuoteOfTheDay);
 router.get('/random', getRandomQuote);
 router.route('/:id')
     .get(getQuoteById)
-    .put(updateQuote)
-    .delete(deleteQuote);
+    .put(protect, updateQuote)
+    .delete(protect, deleteQuote);
 router.post('/:id/upvote', upvoteQuote);
 router.post('/:id/downvote', downvoteQuote);
 

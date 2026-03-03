@@ -1,3 +1,4 @@
+const protect = require('../middleware/auth');
 const express = require('express');
 const router = express.Router();
 const {
@@ -8,11 +9,11 @@ const {
     deleteArc
 } = require('../controllers/arcController');
 
-router.route('/').get(getAllArcs).post(createArc);
+router.route('/').get(getAllArcs).post(protect, createArc);
 
 router.route('/:id')
     .get(getArcById)
-    .put(updateArc)
-    .delete(deleteArc)
+    .put(protect, updateArc)
+    .delete(protect, deleteArc)
 
 module.exports = router;

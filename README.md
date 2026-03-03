@@ -16,6 +16,7 @@ Built with Node.js, Express, and MongoDB.
   - [Arcs](#arcs)
   - [Quotes](#quotes)
 - [Query Parameters](#query-parameters)
+- [Authentication](#authentication)
 - [Tech Stack](#tech-stack)
 
 ---
@@ -199,7 +200,25 @@ GET /api/quotes?search=sea&themes=freedom&sortBy=upvotes&order=desc&page=1&limit
 Paginated responses include `total`, `page`, `pages`, and `count` fields alongside `data`.
 
 ---
+## Authentication
 
+Read operations (GET requests) are public and require no authentication.
+
+Write operations — creating, updating, and deleting quotes, characters, and arcs — are protected by an API key. Include your key in the request header:
+
+```
+api-key: your_api_key
+```
+
+Requests to protected endpoints without a valid key will receive a `401 Unauthorized` response.
+
+To run this project yourself, add your chosen key to your `.env` file:
+
+```
+API_KEY=your_secret_key_here
+```
+
+---
 ## Tech Stack
 
 - **Runtime:** Node.js
