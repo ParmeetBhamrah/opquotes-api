@@ -4,6 +4,7 @@ A searchable, filterable REST API for One Piece quotes. Query quotes by characte
 
 Built with Node.js, Express, and MongoDB.
 
+Live at: https://opquotes-api.onrender.com
 ---
 
 ## Table of Contents
@@ -22,7 +23,9 @@ Built with Node.js, Express, and MongoDB.
 ---
 
 ## Getting Started
+The API is live at `https://opquotes-api.onrender.com` — you can hit any GET endpoint directly in your browser or via Postman without any setup.
 
+To run it locally:
 **Prerequisites:** Node.js v18+ and a MongoDB Atlas account (or local MongoDB instance).
 
 ```bash
