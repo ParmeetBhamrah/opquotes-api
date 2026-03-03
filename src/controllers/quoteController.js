@@ -68,7 +68,7 @@ const getQuoteById = async (req, res, next) => {
 const createQuote = async (req, res, next) => {
     try {
         const quote = await Quote.create(req.body);
-        res.status(200).json({
+        res.status(201).json({
             success: true,
             data: quote,
         });
@@ -137,7 +137,7 @@ const getRandomQuote = async (req, res, next) => {
             data: quote,
         });
     } catch (error) {
-        nextt(error);
+        next(error);
     }
 };
 
@@ -147,7 +147,7 @@ const getQuoteOfTheDay = async (req, res, next) => {
     try {
         const total = await Quote.countDocuments();
         if (!total) {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: 'No quotes found',
             });
@@ -155,7 +155,7 @@ const getQuoteOfTheDay = async (req, res, next) => {
 
         const now = new Date();
         const start = new Date(now.getFullYear(), 0, 0);
-        const dayOfYear = Math.floor(now - start / (1000 * 60 * 60 * 24));
+        const dayOfYear = Math.floor((now - start) / (1000 * 60 * 60 * 24));
         const index = dayOfYear % total;
 
         const quote = await Quote.findOne()
